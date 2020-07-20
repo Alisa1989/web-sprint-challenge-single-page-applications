@@ -1,45 +1,73 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
-//import axios from 'axios';
-//import * as yup from 'yup';
+import axios from 'axios';
+import * as yup from 'yup';
 
-// const formSchema = yup.object().shape({
-//     name: yup.string().required("Must input a name"),
-//     size: yup.string().required("Must select a size"),
-//     extraCheese: "",
-//     pepperoni: "",
-//     ricotta: "",
-//     olives: "",
-//     specialInstructions: ""
-// });
+const formSchema = yup.object().shape({
+    name: yup.string().required("error: Must input a name").min(2, "error: Must be a valid name"),
+    size: yup.string().required("error: Must select a size"),
+    glutenFree: "",
+    pepperoni: "",
+    ricotta: "",
+    olives: "",
+    specialInstructions: ""
+});
 
 const Pizza = (props) => {
 
     const [formState, setFormState] = useState({
         name: "",
         size: "",
-        extraCheese: "",
+        glutenFree: "",
         pepperoni: "",
         ricotta: "",
         olives: "",
         specialInstructions: ""
     });
 
+    const [errorState, setErrorState] = useState({
+        name: "",
+        size: "",
+        glutenFree: "",
+        pepperoni: "",
+        ricotta: "",
+        olives: "",
+        specialInstructions: ""
+      })
+
+      const validate = e => {
+        yup
+          .reach(formSchema, e.target.name)
+          .validate(e.target.value)
+          .then(valid => {
+            setErrorState({
+              ...errorState,
+              [e.target.name]: ""
+            });
+          })
+          .catch(err => {
+            setErrorState({
+              ...errorState,
+              [e.target.name]: err.errors[0]
+            });
+          });
+      };
+
     const formSubmit = e => {
         e.preventDefault();
     
-        // formSchema.isValid(formState).then(valid => {
-        //   if (valid) {
+        formSchema.isValid(formState).then(valid => {
+          if (valid) {
             console.log("form submitted");
-            // axios
-            //   .post("https://reqres.in/api/users", formState)
-            //   .then(response => console.log(response))
-            //   .catch(err => console.log(err));
-           // props.addUser(formState);
-        //   } else {
-        //     console.log("form not complete");
-        //   }
-        // })
+            axios
+              .post("https://reqres.in/api/users", formState)
+              .then(response => console.log(response))
+              .catch(err => console.log(err));
+           //props.addUser(formState);
+          } else {
+            console.log("form not complete");
+          }
+        })
       }
 
     const inputChange = e => {
@@ -68,23 +96,23 @@ const Pizza = (props) => {
                         value={formState.name}
                         onChange={inputChange}
                     />
-                    {/* {errorState.name.length > 0 ? (
+                    {errorState.name.length > 0 ? (
                             <p className="error">{errorState.name}</p>
-                        ) : null} */}
+                        ) : null}
                 </label>
                 <label htmlFor="size">
-                    Select pizza size?
+                    How big?
         <select
                         name="size"
                         id="size"
                         value={formState.position}
                         onChange={inputChange}
                     >
-                        <option value=" ">Small 10'</option>
+                        <option value=" ">Select a size</option>
                         <option value="Small 10'">Small 10'</option>
                         <option value="Medium 12'">Medium 12'</option>
                         <option value="Large 14'">Large 14'</option>
-                        <option value="Extra Large 16'">Extra Large 16'</option>
+                        <option value="Extra Large 16'">Giant! 16'</option>
                     </select>
                 </label>
                 <label htmlFor="glutenFree">
