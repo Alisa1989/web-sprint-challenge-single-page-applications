@@ -1,11 +1,17 @@
 import React from "react";
+import { Route } from "react-router-dom";
+
+import homepage from './homepage'
+import pizza from './pizza'
 
 const App = () => {
   return (
-    <>
-      <h1>Lambda Eats</h1>
-      <p>You can remove this code and create your own header</p>
-    </>
+    <div>
+      <h1>G's Pizza</h1>
+      <Route exact path="/" component= {homepage}/>
+      <Route path= "/pizza" component= {pizza}/>
+    </div>
+
   );
 };
 export default App;
