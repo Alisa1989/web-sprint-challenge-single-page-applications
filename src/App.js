@@ -1,15 +1,15 @@
 import React from "react";
 import { Route } from "react-router-dom";
 
-import homepage from './homepage'
-import pizza from './pizza'
+import Homepage from './homepage'
+import Pizza from './pizza'
 
 const App = () => {
   return (
     <div>
       <h1>G's Pizza</h1>
-      <Route exact path="/" component= {homepage}/>
-      <Route path= "/pizza" component= {pizza}/>
+      <Route exact path="/" component= {Homepage}/>
+      <Route path= "/pizza" component= {Pizza}/>
     </div>
 
   );
